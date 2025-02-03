@@ -1,0 +1,32 @@
+create database Academy
+
+create table Groups(
+Id int identity  not null primary key,
+[Name] nvarchar(10) not null check([Name] != '') unique,
+Raiting int not null check(Raiting >= 0 and Raiting <= 5),
+[Year] int not null check([Year] >= 1 and [Year] <= 5)
+);
+
+create table Departments(
+Id int identity not null primary key,
+Financing money not null check(Financing >= 0) default 0,
+[Name] nvarchar(100) not null check([Name] != '') unique
+);
+
+create table Faculties(
+Id int identity not null primary key, 
+[Name] nvarchar(100) not null check([Name] != '') unique 
+);
+
+create table Teachers(
+Id int identity not null primary key,
+EmploymentDate date not null check(EmploymentDate >= '01-01-1990'),
+[Name] nvarchar(max) not null check([Name] != ''),
+Premium money not null check(Premium >= 0) default 0,
+Salary money not null check(Salary > 0),
+Surname nvarchar(max) not null check(Surname != '')
+);
+
+select * from Groups
+
+--drop table Teachers
