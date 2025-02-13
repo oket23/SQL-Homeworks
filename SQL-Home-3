@@ -1,0 +1,63 @@
+CREATE DATABASE Home3
+
+use Home3
+
+CREATE TABLE Orders(
+OrderId int primary key identity not null,
+Customer varchar(30) not null check(Customer != ''),
+OrderDate Date not null check(OrderDate <= GETUTCDATE()),
+TotalAmount Float not null check(TotalAmount > 0),
+Discount float not null default 0 check(Discount >=0),
+PaymentMethod varchar(20) not null check(PaymentMethod != ''),
+[Status] varchar(15) not null check([Status] != ''),
+ShippingCountry varchar(50) not null check(ShippingCountry != '')
+);
+
+INSERT INTO Orders (Customer, OrderDate, TotalAmount, Discount, PaymentMethod, [Status], ShippingCountry) 
+VALUES
+('John Doe', '2025-02-10', 150.75, 10, 'Credit Card', 'Pending', 'USA'),
+('Alice Smith', '2025-02-11', 220.50, 15, 'PayPal', 'Delivered', 'Canada'),
+('Bob Johnson', '2025-02-12', 320.00, 20, 'Cash', 'Canceled', 'UK'),
+('John Doe', '2025-02-09', 45.00, 5, 'Credit Card', 'Pending', 'Germany'),
+('David Brown', '2025-02-08', 85.50, 0, 'PayPal', 'Delivered', 'France'),
+('Sara Lee', '2025-02-07', 500.00, 25, 'Credit Card', 'Delivered', 'USA'),
+('Michael Green', '2025-02-06', 120.30, 10, 'Cash', 'Pending', 'Australia'),
+('Olivia Wilson', '2025-02-05', 150.90, 0, 'PayPal', 'Canceled', 'UK'),
+('James Taylor', '2025-02-04', 99.99, 5, 'Credit Card', 'Delivered', 'Canada'),
+('Sophia Martinez', '2025-02-03', 200.00, 10, 'PayPal', 'Pending', 'Spain');
+
+select * from Orders
+
+--1
+select SUM(o.TotalAmount) as 'Total sum' from Orders o
+where o.Status = 'Delivered';
+
+--2
+select o.Customer,Count(o.Customer) as 'Order count' from Orders o
+group by o.Customer
+order by 'Order count' desc;
+
+--3
+select o.PaymentMethod,AVG(o.TotalAmount) as 'AvgAmount' from Orders o
+group by o.PaymentMethod
+order by AvgAmount desc;
+
+--4
+select o.OrderDate,Sum(o.TotalAmount) as 'Profit' from Orders o
+group by o.OrderDate
+order by Profit desc;
+
+--5
+select top 1 o.Discount from Orders o
+group by o.Discount
+order by o.Discount desc;
+
+--6
+select o.ShippingCountry,Count(o.ShippingCountry) as 'Orders' from Orders o
+group by o.ShippingCountry
+order by 'Orders' desc;
+
+--7
+select top 5 o.Customer,sum(o.TotalAmount) as 'Amount' from Orders o
+group by o.Customer
+order by Amount desc;
