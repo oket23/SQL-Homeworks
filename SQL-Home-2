@@ -1,0 +1,145 @@
+create database Home2;
+use home2
+
+CREATE TABLE Departments(
+Id int primary key identity not null,
+Financing money not null default 0 check(Financing >= 0),
+[Name] nvarchar(100) not null unique check([Name] != ''),
+);
+
+CREATE TABLE Faculties(
+Id int primary key not null identity,
+Dean nvarchar(max) not null check(Dean != ''),
+[Name] nvarchar(100) not null unique check([Name] != ''),
+);
+
+CREATE TABLE Groups(
+Id int primary key not null identity,
+[Name] nvarchar(10) not null unique check([Name] != ''),
+Raiting int not null check(Raiting >= 0 and Raiting <=5),
+[Year] int not null check([Year] >= 1 and [Year] <=5)
+);
+
+CREATE TABLE Teachers(
+Id int primary key not null identity,
+EmploymentDate DATE not null check(EmploymentDate >= '01-01-1990'),
+IsAssistant bit not null default 0,
+IsProfessor bit not null default 0,
+[Name] nvarchar(max) not null check([Name] != ''),
+Position nvarchar(max) not null check(Position != ''),
+Premium money not null default 0 check(Premium >= 0),
+Salary money not null check(Salary > 0),
+Surname nvarchar(max) not null check(Surname != '')
+);
+
+INSERT INTO Departments (Financing, [Name]) VALUES
+(500000, 'Computer Science'),
+(300000, 'Mathematics'),
+(450000, 'Physics'),
+(400000, 'Biology'),
+(350000, 'History'),
+(380000, 'Chemistry'),
+(600000, 'Engineering'),
+(420000, 'Economics'),
+(320000, 'Philosophy'),
+(280000, 'Linguistics');
+
+
+INSERT INTO Faculties (Dean, [Name]) VALUES
+('Dr. John Smith', 'Faculty of Computer Science'),
+('Dr. Mary Johnson', 'Faculty of Mathematics'),
+('Dr. Robert Brown', 'Faculty of Physics'),
+('Dr. Emily Davis', 'Faculty of Biology'),
+('Dr. William Wilson', 'Faculty of History'),
+('Dr. Olivia Miller', 'Faculty of Chemistry'),
+('Dr. James Anderson', 'Faculty of Engineering'),
+('Dr. Sophia Moore', 'Faculty of Economics'),
+('Dr. Benjamin Taylor', 'Faculty of Philosophy'),
+('Dr. Charlotte White', 'Faculty of Linguistics');
+
+INSERT INTO Groups ([Name], Raiting, [Year]) VALUES
+('CS-101', 5, 1),
+('CS-201', 4, 2),
+('MATH-102', 3, 1),
+('MATH-202', 5, 2),
+('PHYS-103', 4, 1),
+('PHYS-203', 3, 2),
+('BIO-104', 5, 1),
+('BIO-204', 4, 2),
+('ENG-105', 4, 1),
+('ENG-205', 5, 2);
+
+INSERT INTO Teachers (EmploymentDate, IsAssistant, IsProfessor, [Name], Position, Premium, Salary, Surname) 
+VALUES 
+('2005-09-15', 1, 0, 'Alexander', 'Mathematics Department Assistant', 2000, 25000, 'Smith'),
+('1998-03-20', 0, 1, 'Mary', 'Physics Professor', 5000, 40000, 'Johnson'),
+('2010-07-01', 1, 0, 'Igor', 'Programming Department Assistant', 1500, 23000, 'Williams'),
+('2001-11-10', 0, 1, 'Natalie', 'Economics Professor', 4500, 38000, 'Brown'),
+('2015-04-25', 1, 0, 'Andrew', 'History Department Assistant', 1200, 21000, 'Davis'),
+('1995-06-30', 0, 1, 'William', 'Chemistry Professor', 6000, 42000, 'Miller'),
+('2012-02-18', 1, 0, 'Helen', 'Biology Department Assistant', 1700, 24000, 'Wilson'),
+('2008-09-05', 0, 1, 'George', 'Computer Science Professor', 4800, 39000, 'Moore'),
+('2003-12-12', 1, 0, 'Sophia', 'Literature Department Assistant', 1600, 22000, 'Taylor'),
+('1992-05-22', 0, 1, 'Richard', 'Philosophy Professor', 5500, 41000, 'Anderson');
+
+select * from Teachers
+select * from Groups
+select * from Departments
+select * from Faculties
+
+--1
+select d.Name,d.Financing,d.Id from Departments d
+
+--2
+select g.Name as 'Group Name',g.Raiting as 'Group Rating' from Groups g
+
+--3
+select t.Surname,t.Salary,t.Premium from Teachers t
+
+--4
+select 'The dean of faculty ' + f.Name + ' is ' + f.Dean + '.' as FacultyInformation from Faculties f
+
+--5
+select t.Surname from Teachers t
+where t.IsProfessor = 1 and t.Salary > 1050;
+
+--6
+select d.Name from Departments d
+where d.Financing < 11000 or d.Financing > 25000;
+
+--7
+select d.Name from Departments d
+where d.Name != 'Computer Science';
+
+--8
+select t.Surname,t.Position from Teachers t
+where t.IsProfessor = 0;
+
+--9
+select t.Surname,t.Position,t.Salary,t.Premium from Teachers t
+where t.IsAssistant = 1 and t.Premium between 160 and 550;
+
+--10
+select t.Surname,t.Salary from Teachers t
+where t.IsAssistant = 1;
+
+--11
+select t.Surname,t.Position from Teachers t
+where t.EmploymentDate < '01-01-2000';
+
+--12
+select d.Name as 'Name of Department' from Departments d
+where d.Name < 'Software Development'
+order by d.Name;
+
+--13
+select t.Name from Teachers t
+where t.IsAssistant = 1 and (t.Salary + t.Premium) <= 1200;
+
+--14
+select g.Name from Groups g
+where g.Year = 5 and g.Raiting between 2 and 4;
+
+--15
+select t.Surname from Teachers t
+where t.IsAssistant = 1 and t.Salary < 550 or t.Premium < 200;
