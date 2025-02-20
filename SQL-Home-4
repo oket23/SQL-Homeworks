@@ -1,0 +1,57 @@
+create table Curators(
+Id int primary key identity,
+[Name] varchar(30) check([Name] != '') not null,
+Surname varchar(30) check(Surname != '') not null,
+);
+
+
+create table Faculties(
+Id int primary key identity,
+Financing money not null check(Financing > 0),
+[Name] varchar(30) check([Name] != '') not null
+);
+
+create table Departments(
+Id int primary key identity,
+Financing money not null check(Financing > 0),
+[Name] varchar(30) check([Name] != '') not null,
+FacultyId int foreign key references Faculties(Id)
+);
+
+create table Groups(
+Id int primary key identity,
+[Name] varchar(30) check([Name] != '') not null,
+[Year] datetime not null check([Year] > '1899-12-31'),
+DepartmentId int foreign key references Departments(Id)
+);
+
+create table GroupsCurators(
+Id int primary key identity,
+CuratorId int foreign key references Curators(Id),
+GroupId int foreign key references Groups(Id),
+);
+
+create table Subjects(
+Id int primary key identity,
+[Name] varchar(30) check([Name] != '') not null
+);
+
+create table Teachers(
+Id int primary key identity,
+[Name] varchar(30) check([Name] != '') not null,
+Salary money not null check(Salary > 0),
+Surname varchar(30) check(Surname != '') not null
+);
+
+create table Lectures(
+Id int primary key identity,
+LectureRoom varchar(max) not null check(LectureRoom != ''),
+SubjectsId int foreign key references Subjects(Id),
+TeachersID int foreign key references Teachers(Id)
+);
+
+create table GroupsLectures(
+Id int primary key identity,
+GroupId int foreign key references Groups(Id),
+LectureId int foreign key references Lectures(Id)
+);
