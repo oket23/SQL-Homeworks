@@ -1,0 +1,39 @@
+--1
+select r.OperationTime,sh.Name from [Order] r
+join Shop sh
+on sh.Id = r.ShopId
+where r.OperationTime > '2025-03-01'
+order by sh.Name
+
+--2
+select p.Title,p.Price,m.Name from [Product] p
+join Manufacturer m
+on m.Id = p.ManufacturerId
+where p.Price < 8.00
+order by m.Name,p.Price
+
+--3
+select p.Name,c.Discount,pc.ContactValue from Person p
+join Customer c
+on p.Id = c.PersonId
+join PersonContact pc
+on p.Id = pc.PersonId
+join ContactType ct
+on ct.Id = pc.ContactTypeId
+where ct.Name = 'Email'
+order by p.Name
+
+--4
+select p.Title as 'Name',pc.[Name] as 'Category',ct.[Name] as 'City' from [Product] p
+join [Order] ord
+on ord.PrductId = p.Id
+join Shop sh
+on sh.Id = ord.ShopId
+join Street st
+on st.Id = sh.StreetId
+join City ct
+on ct.Id = st.CityId
+join ProductCategory pc
+on pc.Id = p.CategoryId
+where ct.[Name] like 'K%'
+order by p.Title;
